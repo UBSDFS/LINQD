@@ -1,0 +1,145 @@
+# LINQD — Event Details Screen
+
+## 1. Purpose
+
+Display detailed information about a selected
+event and provide access to RSVP functionality.
+
+Both authenticated users and guests can view
+public event details.
+
+Private event details require appropriate access.
+
+## 2. Screen Layout
+
+              ← Event Details
+
+         [ Event Image ]
+
+         Saturday Jazz Night
+     Hosted by Hampton Roads Social
+
+     Date:
+     Saturday, October 24
+
+     Time:
+     7:00 PM - 10:00 PM
+
+     Location:
+     Downtown Newport News
+
+     About This Event:
+     Event description displayed here.
+
+     Visibility: Public
+     Admission: Free
+
+          [ RSVP to Event ]
+
+## 3. UI Components
+
+- Back navigation
+- Event image or placeholder
+- Label: Event title
+- Label: Host name
+- Label: Date
+- Label: Time
+- Label: Location
+- Label: Event description
+- Label: Event visibility
+- Label: Admission information
+- Button: RSVP to Event
+
+## 4. Navigation
+
+EventListPage → EventDetailsPage
+
+Home Event Card → EventDetailsPage
+
+RSVP Button → RSVPPage
+
+Back → Previous Page
+
+## 5. Expected Behavior
+
+### Event Selection
+
+1. User selects an event.
+2. Application identifies the selected EventId.
+3. EventDetailsPage receives the EventId.
+4. Application retrieves the matching event.
+5. Event information is displayed.
+
+### RSVP Button
+
+1. User selects RSVP to Event.
+2. Application navigates to RSVPPage.
+3. Selected EventId is passed to RSVPPage.
+4. RSVPPage displays the selected event.
+
+### Back Button
+
+Returns to the previous page without
+changing event information.
+
+## 6. Authenticated User Behavior
+
+Authenticated users can:
+
+- View public event details
+- View authorized private event details
+- Navigate to RSVP
+- Have their user information prepopulated
+  on the RSVP screen
+
+## 7. Guest Behavior
+
+Guest users can:
+
+- View public event details
+- Navigate to RSVP
+- Enter their RSVP information manually
+
+Guest users cannot view private events
+without authorization.
+
+## 8. Week 2 Implementation
+
+Use hard-coded event details.
+
+Event information will be retrieved
+from a mock EventService.
+
+No database or API connection is required.
+
+RSVP submission will not persist data.
+
+## 9. Week 3 Integration
+
+- Retrieve stored events from SQLite.
+- Retrieve public event details from the API.
+- Support a consistent Event model.
+- Associate RSVP records with EventId.
+- Preserve the event's source information.
+
+## 10. Future Enhancements
+
+- Event image galleries
+- Interactive location maps
+- Share event functionality
+- Add to calendar
+- Event capacity
+- Attendance counts
+- Host profiles
+- Event updates and notifications
+
+## 11. Acceptance Criteria
+
+- Selected event details display correctly.
+- Event title matches the selected event.
+- Date, time, location, and description display.
+- RSVP button opens RSVPPage.
+- Selected EventId is passed correctly.
+- Back navigation works.
+- Guests can view public event details.
+- Private event access is restricted.
