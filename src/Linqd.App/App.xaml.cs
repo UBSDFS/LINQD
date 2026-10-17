@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
+﻿
 namespace Linqd.App;
 
 public partial class App : Application
@@ -9,7 +8,8 @@ public partial class App : Application
 		InitializeComponent();
 	}
 
-	protected override Window CreateWindow(IActivationState? activationState)
+	protected override Window CreateWindow(
+		IActivationState? activationState)
 	{
 		return new Window(new AppShell());
 	}
