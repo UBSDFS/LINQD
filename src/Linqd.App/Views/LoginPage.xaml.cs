@@ -64,6 +64,7 @@ public partial class LoginPage : ContentPage
             "Login Successful",
             $"Welcome, {user.FirstName}!",
             "OK");
+        await Shell.Current.GoToAsync("home");
     }
 
     private async void OnCancelClicked(object sender, EventArgs e)

@@ -22,13 +22,11 @@ public partial class WelcomePage : ContentPage
 
     private async void OnGuestClicked(object sender, EventArgs e)
     {
-        // Clear any previous logged-in session.
         var sessionService = IPlatformApplication.Current!
             .Services.GetRequiredService<UserSessionService>();
 
         sessionService.Logout();
 
-        // Navigate to the guest experience.
-        await Shell.Current.GoToAsync("guest");
+        await Shell.Current.GoToAsync("home");
     }
 }

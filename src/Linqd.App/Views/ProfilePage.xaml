@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Linqd.App.Views.ProfilePage"
+    Title="Profile">
+
+    <VerticalStackLayout Padding="25"
+            Spacing="15">
+
+        <Label
+            Text="My Profile"
+            FontSize="26"
+            FontAttributes="Bold"/>
+
+        <Label
+            x:Name="NameLabel"
+            Text="Name:"/>
+
+        <Label
+            x:Name="UsernameLabel"
+            Text="Username:"/>
+
+        <Label
+            x:Name="EmailLabel"
+            Text="Email:"/>
+
+        <Button
+            x:Name="LogoutButton"
+            Text="Logout"
+            Clicked="OnLogoutClicked"/>
+
+    </VerticalStackLayout>
+</ContentPage>
