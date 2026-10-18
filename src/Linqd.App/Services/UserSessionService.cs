@@ -9,12 +9,12 @@ public class UserSessionService
 
     public bool IsGuest => CurrentUser == null;
 
-    public void login(User user)
+    public void Login(User user)
     {
         CurrentUser = user;
     }
 
-    public void logout()
+    public void Logout()
     {
         CurrentUser = null;
     }
