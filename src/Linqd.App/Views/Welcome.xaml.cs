@@ -1,4 +1,5 @@
-
+using Linqd.App.Services;
+using Microsoft.Extensions.DependencyInjection;
 namespace Linqd.App.Views;
 
 public partial class WelcomePage : ContentPage
@@ -14,13 +15,20 @@ public partial class WelcomePage : ContentPage
         await Shell.Current.GoToAsync("login");
     }
 
-    private void OnRegisterClicked(object sender, EventArgs e)
+    private async void OnRegisterClicked(object sender, EventArgs e)
     {
-        // Registration navigation will be added later.
+        await Shell.Current.GoToAsync("register");
     }
 
-    private void OnGuestClicked(object sender, EventArgs e)
+    private async void OnGuestClicked(object sender, EventArgs e)
     {
-        // Guest navigation will be added later.
+        // Clear any previous logged-in session.
+        var sessionService = IPlatformApplication.Current!
+            .Services.GetRequiredService<UserSessionService>();
+
+        sessionService.Logout();
+
+        // Navigate to the guest experience.
+        await Shell.Current.GoToAsync("guest");
     }
 }

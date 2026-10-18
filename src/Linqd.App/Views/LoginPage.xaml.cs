@@ -45,14 +45,15 @@ public partial class LoginPage : ContentPage
         }
 
         // Create the logged-in user.
-        User user = new User
+
+        User? user = _authService.GetUser(username);
+
+        if (user == null)
         {
-            UserId = 1,
-            FirstName = "Test",
-            LastName = "User",
-            Email = "testuser@example.com",
-            Username = username
-        };
+            MessageLabel.Text = "Unable to retrieve user profile.";
+            MessageLabel.IsVisible = true;
+            return;
+        }
 
         // Save the user in the shared session.
         _sessionService.Login(user);

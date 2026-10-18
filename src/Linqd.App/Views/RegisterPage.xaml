@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Linqd.App.Views.RegisterPage"
+    Title="Register">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30"
+            Spacing="15">
+
+            <Label
+                Text="Create Your Account"
+                FontSize="28"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+
+            <Entry
+                x:Name="FirstNameEntry"
+                Placeholder="First Name"/>
+
+            <Entry
+                x:Name="LastNameEntry"
+                Placeholder="Last Name"/>
+
+            <Entry
+                x:Name="EmailEntry"
+                Placeholder="Email Address"
+                Keyboard="Email"/>
+
+            <Entry
+                x:Name="UsernameEntry"
+                Placeholder="Username"/>
+
+            <Entry
+                x:Name="PasswordEntry"
+                Placeholder="Password"
+                IsPassword="True"/>
+
+            <Entry
+                x:Name="ConfirmPasswordEntry"
+                Placeholder="Confirm Password"
+                IsPassword="True"/>
+
+            <Label
+                x:Name="MessageLabel"
+                TextColor="Red"
+                IsVisible="True"/>
+
+            <Button
+                Text="Register"
+                Clicked="OnRegisterClicked"/>
+
+            <Button
+                Text="Cancel"
+                Clicked="OnCancelClicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
