@@ -27,6 +27,6 @@ public partial class WelcomePage : ContentPage
 
         sessionService.Logout();
 
-        await Shell.Current.GoToAsync("home");
+        await Shell.Current.GoToAsync("//MainTabs/HomeTab");
     }
 }

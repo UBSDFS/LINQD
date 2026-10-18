@@ -6,9 +6,40 @@
     xmlns:views="clr-namespace:Linqd.App.Views"
     Title="LINQD">
 
+    <!-- Entry screen -->
     <ShellContent
         Title="Welcome"
         ContentTemplate="{DataTemplate views:WelcomePage}"
         Route="WelcomePage"/>
+
+    <!-- Main application navigation -->
+    <TabBar Route="MainTabs">
+
+        <ShellContent
+            Title="Home"
+            Route="HomeTab"
+            ContentTemplate="{DataTemplate views:HomePage}"/>
+
+        <ShellContent
+            Title="Discover"
+            Route="DiscoverTab"
+            ContentTemplate="{DataTemplate views:HomePage}"/>
+
+        <ShellContent
+            Title="Create"
+            Route="CreateTab"
+            ContentTemplate="{DataTemplate views:CreateEventPage}"/>
+
+        <ShellContent
+            Title="My Circle"
+            Route="CircleTab"
+            ContentTemplate="{DataTemplate views:HomePage}"/>
+
+        <ShellContent
+            Title="Profile"
+            Route="ProfileTab"
+            ContentTemplate="{DataTemplate views:ProfilePage}"/>
+
+    </TabBar>
 
 </Shell>

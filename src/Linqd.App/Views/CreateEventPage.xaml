@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Linqd.App.Views.CreateEventPage"
+    Title="Create Event">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="25"
+                Spacing="15">
+
+            <Label
+                Text="Create an Event"
+                FontSize="26"
+                FontAttributes="Bold"/>
+
+            <Entry
+                x:Name="TitleEntry"
+                Placeholder="Event Title"/>
+
+            <Entry
+                x:Name="LocationEntry"
+                Placeholder="Location"/>
+
+            <Editor
+                x:Name="DescriptionEditor"
+                Placeholder="Event Description"
+                HeightRequest="100"/>
+
+            <Label Text="Event Date"/>
+            <DatePicker x:Name="EventDatePicker"/>
+
+            <Label Text="Event Time"/>
+            <TimePicker x:Name="EventTimePicker"/>
+
+            <Label Text="Event Visibility"/>
+            <Picker
+                x:Name="VisibilityPicker"
+                Title="Select Visibility">
+                <Picker.Items>
+                    <x:String>Public</x:String>
+                    <x:String>Private</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Label
+                x:Name="MessageLabel"
+                TextColor="Red"/>
+
+            <Button
+                Text="Create Event"
+                Clicked="OnCreateEventClicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

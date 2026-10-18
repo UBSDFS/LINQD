@@ -20,6 +20,7 @@ public static class MauiProgram
 #endif
 		builder.Services.AddSingleton<AuthenticationService>();
 		builder.Services.AddSingleton<UserSessionService>();
+		builder.Services.AddSingleton<EventService>();
 		return builder.Build();
 	}
 }

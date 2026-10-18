@@ -17,7 +17,9 @@
             <!-- Public event discovery -->
             <Border StrokeThickness="1"
                     Padding="15">
+
                 <VerticalStackLayout Spacing="10">
+
                     <Label
                         Text="Happening This Weekend"
                         FontSize="20"
@@ -26,15 +28,23 @@
                     <Label
                         Text="Discover public events near you."/>
 
+                    <VerticalStackLayout
+                        x:Name="PublicEventsContainer"
+                        Spacing="10"/>
+
                     <Label
-                        Text="Public events will appear here."/>
+                        x:Name="NoPublicEventsLabel"
+                        Text="No public events available."/>
+
                 </VerticalStackLayout>
             </Border>
 
             <!-- Private circle plans -->
             <Border StrokeThickness="1"
                     Padding="15">
+
                 <VerticalStackLayout Spacing="10">
+
                     <Label
                         Text="Your Circle's Plans"
                         FontSize="20"
@@ -43,10 +53,17 @@
                     <Label
                         Text="Stay connected with your circle."/>
 
+                    <VerticalStackLayout
+                        x:Name="PrivateEventsContainer"
+                        Spacing="10"/>
+
                     <Label
-                        Text="Private plans will appear here."/>
+                        x:Name="NoPrivateEventsLabel"
+                        Text="No private plans available."/>
+
                 </VerticalStackLayout>
             </Border>
+
             <Button
                 Text="My Profile"
                 Clicked="OnProfileClicked"/>
