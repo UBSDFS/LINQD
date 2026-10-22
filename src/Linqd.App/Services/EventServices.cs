@@ -1,20 +1,24 @@
-
+using Linqd.App.Data;
 using Linqd.App.Models;
 
 namespace Linqd.App.Services;
 
 public class EventService
 {
-    private readonly List<Event> _events = new();
+    private readonly EventRepository _eventRepository;
 
-    public void AddEvent(Event newEvent)
+    public EventService(EventRepository eventRepository)
     {
-        newEvent.EventId = _events.Count + 1;
-        _events.Add(newEvent);
+        _eventRepository = eventRepository;
     }
 
-    public List<Event> GetEvents()
+    public async Task<int> AddEventAsync(Event newEvent)
     {
-        return _events.ToList();
+        return await _eventRepository.AddEventAsync(newEvent);
+    }
+
+    public async Task<List<Event>> GetEventsAsync()
+    {
+        return await _eventRepository.GetEventsAsync();
     }
 }

@@ -1,8 +1,9 @@
-
+using SQLite;
 namespace Linqd.App.Models;
 
 public class User
 {
+    [PrimaryKey, AutoIncrement]
     public int UserId { get; set; }
 
     public string FirstName { get; set; } = string.Empty;

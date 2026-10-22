@@ -1,9 +1,10 @@
 
-
+using SQLite;
 namespace Linqd.App.Models;
 
 public class Event
 {
+    [PrimaryKey, AutoIncrement]
 
     public int EventId { get; set; }
     public string Title { get; set; } = string.Empty;

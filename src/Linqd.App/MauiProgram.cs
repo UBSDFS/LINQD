@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Linqd.App.Services;
+using Linqd.App.Data;
 namespace Linqd.App;
 
 public static class MauiProgram
@@ -21,6 +22,12 @@ public static class MauiProgram
 		builder.Services.AddSingleton<AuthenticationService>();
 		builder.Services.AddSingleton<UserSessionService>();
 		builder.Services.AddSingleton<EventService>();
-		return builder.Build();
+		builder.Services.AddSingleton<LinqdDatabase>();
+		builder.Services.AddSingleton<EventRepository>();
+		var app = builder.Build();
+
+
+
+		return app;
 	}
 }

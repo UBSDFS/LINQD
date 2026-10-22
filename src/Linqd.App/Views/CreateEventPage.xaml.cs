@@ -23,7 +23,7 @@ public partial class CreateEventPage : ContentPage
             .Services.GetRequiredService<EventService>();
     }
 
-    private void OnCreateEventClicked(object sender, EventArgs e)
+    private async void OnCreateEventClicked(object sender, EventArgs e)
     {
         // Only authenticated users can create events.
         if (!_sessionService.IsLoggedIn)
@@ -81,11 +81,20 @@ public partial class CreateEventPage : ContentPage
             HostUserId = _sessionService.CurrentUser!.UserId
         };
 
-        // Save the event through the shared service.
-        _eventService.AddEvent(newEvent);
+        try
+        {
+            await _eventService.AddEventAsync(newEvent);
 
-        // Confirm successful creation.
-        MessageLabel.Text = "Event created successfully!";
-        MessageLabel.TextColor = Colors.Green;
+            MessageLabel.Text = "Event created successfully!";
+            MessageLabel.TextColor = Colors.Green;
+        }
+        catch (Exception ex)
+        {
+            MessageLabel.Text = "Unable to save event. Please try again.";
+            MessageLabel.TextColor = Colors.Red;
+
+            System.Diagnostics.Debug.WriteLine(
+                $"Event save failed: {ex}");
+        }
     }
 }

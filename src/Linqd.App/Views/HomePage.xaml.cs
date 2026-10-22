@@ -22,20 +22,29 @@ public partial class HomePage : ContentPage
     }
 
     // Refresh events whenever Home becomes visible.
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        LoadEvents();
+
+        try
+        {
+            await LoadEventsAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Event loading failed: {ex}");
+        }
     }
 
-    private void LoadEvents()
+    private async Task LoadEventsAsync()
     {
         // Clear previous event displays.
         PublicEventsContainer.Children.Clear();
         PrivateEventsContainer.Children.Clear();
 
         // Retrieve saved events.
-        var events = _eventService.GetEvents();
+        var events = await _eventService.GetEventsAsync();
 
         // Public events are available to everyone.
         var publicEvents = events
