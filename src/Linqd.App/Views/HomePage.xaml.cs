@@ -120,6 +120,6 @@ public partial class HomePage : ContentPage
     // Preserve existing Profile navigation.
     private async void OnProfileClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("profile");
+        await Shell.Current.GoToAsync("//MainTabs/ProfileTab");
     }
 }

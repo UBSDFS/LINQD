@@ -6,7 +6,7 @@
     Title="Profile">
 
     <VerticalStackLayout Padding="25"
-            Spacing="15">
+                         Spacing="15">
 
         <Label
             Text="My Profile"
@@ -29,6 +29,17 @@
             x:Name="LogoutButton"
             Text="Logout"
             Clicked="OnLogoutClicked"/>
+        <Button
+            x:Name="LoginButton"
+            Text="Log In"
+            IsVisible="False"
+            Clicked="OnLoginClicked"/>
+
+        <Button
+            x:Name="RegisterButton"
+            Text="Register"
+            IsVisible="False"
+            Clicked="OnRegisterClicked"/>
 
     </VerticalStackLayout>
 </ContentPage>
