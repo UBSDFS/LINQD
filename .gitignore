@@ -1,6 +1,7 @@
 # .NET build output
 bin/
 obj/
+linqd-verification.db3
 
 # Visual Studio / VS Code
 .vs/
