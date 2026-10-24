@@ -1,71 +1,93 @@
-
+using System.Security.Cryptography;
+using Linqd.App.Data;
 using Linqd.App.Models;
 
 namespace Linqd.App.Services;
 
 public class AuthenticationService
 {
-    private const string TestUsername = "testuser";
-    private const string TestPassword = "password1";
+    private readonly UserRepository _userRepository;
 
-    // Temporary in-memory accounts for this sprint.
-    private readonly List<(User User, string Password)> _accounts = new();
-
-    public bool ValidateLogin(string username, string password)
+    public AuthenticationService(UserRepository userRepository)
     {
-        // Preserve our original test account.
-        if (username == TestUsername && password == TestPassword)
-        {
-            return true;
-        }
-
-        // Check newly registered accounts.
-        return _accounts.Any(account =>
-            account.User.Username == username &&
-            account.Password == password);
+        _userRepository = userRepository;
     }
 
-    public User? GetUser(string username)
+    // Register a user in SQLite.
+    public async Task<bool> RegisterUserAsync(User user, string password)
     {
-        // Return the original test account.
-        if (username == TestUsername)
-        {
-            return new User
-            {
-                UserId = 1,
-                FirstName = "Test",
-                LastName = "User",
-                Email = "testuser@example.com",
-                Username = TestUsername
-            };
-        }
+        // Prevent duplicate usernames.
+        var existingUser = await _userRepository
+            .GetUserByUsernameAsync(user.Username);
 
-        // Look for a newly registered account.
-        return _accounts
-            .FirstOrDefault(account =>
-                account.User.Username == username)
-            .User;
-    }
-
-    public bool RegisterUser(User user, string password)
-    {
-        // Prevent duplicate usernames and email addresses.
-        if (user.Username.Equals(TestUsername, StringComparison.OrdinalIgnoreCase) ||
-            _accounts.Any(account =>
-                account.User.Username.Equals(
-                    user.Username,
-                    StringComparison.OrdinalIgnoreCase) ||
-                account.User.Email.Equals(
-                    user.Email,
-                    StringComparison.OrdinalIgnoreCase)))
+        if (existingUser != null ||
+            user.Username.Equals("testuser", StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }
 
-        user.UserId = _accounts.Count + 2;
+        // Hash the password before storing it.
+        user.PasswordHash = HashPassword(password);
 
-        _accounts.Add((user, password));
+        await _userRepository.AddUserAsync(user);
 
         return true;
+    }
+
+    // Authenticate using SQLite or the temporary test account.
+    public async Task<User?> LoginAsync(string username, string password)
+    {
+
+
+        var user = await _userRepository.GetUserByUsernameAsync(username);
+
+        if (user == null)
+            return null;
+
+        return VerifyPassword(password, user.PasswordHash) ? user : null;
+    }
+
+    // PBKDF2 with a unique salt for each password.
+    private static string HashPassword(string password)
+    {
+        byte[] salt = RandomNumberGenerator.GetBytes(16);
+
+        byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
+            password,
+            salt,
+            210_000,
+            HashAlgorithmName.SHA256,
+            32);
+
+        return $"{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
+    }
+
+    private static bool VerifyPassword(string password, string storedHash)
+    {
+        string[] parts = storedHash.Split(':');
+
+        if (parts.Length != 2)
+            return false;
+
+        try
+        {
+            byte[] salt = Convert.FromBase64String(parts[0]);
+            byte[] expectedHash = Convert.FromBase64String(parts[1]);
+
+            byte[] actualHash = Rfc2898DeriveBytes.Pbkdf2(
+                password,
+                salt,
+                210_000,
+                HashAlgorithmName.SHA256,
+                32);
+
+            return CryptographicOperations.FixedTimeEquals(
+                actualHash,
+                expectedHash);
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
     }
 }

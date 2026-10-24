@@ -24,5 +24,11 @@ public partial class AppShell : Shell
 		Routing.RegisterRoute(
 			"profile",
 			typeof(ProfilePage));
+		Routing.RegisterRoute(
+"eventdetails",
+typeof(EventDetailsPage));
+		Routing.RegisterRoute(
+	"rsvp",
+	typeof(RsvpPage));
 	}
 }

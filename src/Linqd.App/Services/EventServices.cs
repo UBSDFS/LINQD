@@ -21,4 +21,13 @@ public class EventService
     {
         return await _eventRepository.GetEventsAsync();
     }
+    // Get events created by the logged-in user.
+    public async Task<List<Event>> GetHostedEventsAsync(int userId)
+    {
+        return await _eventRepository.GetHostedEventsAsync(userId);
+    }
+    public async Task<Event?> GetEventByIdAsync(int eventId)
+    {
+        return await _eventRepository.GetEventByIdAsync(eventId);
+    }
 }

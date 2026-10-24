@@ -14,7 +14,7 @@ public partial class LoginPage : ContentPage
     {
         InitializeComponent();
 
-        // Retrieve the shared services registered in MauiProgram.cs.
+        // Retrieve shared services registered in MauiProgram.cs.
         _authService = IPlatformApplication.Current!
             .Services.GetRequiredService<AuthenticationService>();
 
@@ -27,7 +27,7 @@ public partial class LoginPage : ContentPage
         string username = UsernameEntry.Text?.Trim() ?? "";
         string password = PasswordEntry.Text ?? "";
 
-        // Check for empty fields.
+        // Validate required fields.
         if (string.IsNullOrWhiteSpace(username) ||
             string.IsNullOrWhiteSpace(password))
         {
@@ -36,26 +36,32 @@ public partial class LoginPage : ContentPage
             return;
         }
 
-        // Validate the test credentials.
-        if (!_authService.ValidateLogin(username, password))
+        User? user;
+
+        try
+        {
+            // Authenticate using the database-backed service.
+            user = await _authService.LoginAsync(username, password);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Login failed: {ex}");
+
+            MessageLabel.Text = "Unable to log in. Please try again.";
+            MessageLabel.IsVisible = true;
+            return;
+        }
+
+        // Reject invalid credentials.
+        if (user == null)
         {
             MessageLabel.Text = "Invalid username or password.";
             MessageLabel.IsVisible = true;
             return;
         }
 
-        // Create the logged-in user.
-
-        User? user = _authService.GetUser(username);
-
-        if (user == null)
-        {
-            MessageLabel.Text = "Unable to retrieve user profile.";
-            MessageLabel.IsVisible = true;
-            return;
-        }
-
-        // Save the user in the shared session.
+        // Store the authenticated user in the shared session.
         _sessionService.Login(user);
 
         MessageLabel.IsVisible = false;
@@ -64,6 +70,8 @@ public partial class LoginPage : ContentPage
             "Login Successful",
             $"Welcome, {user.FirstName}!",
             "OK");
+
+        // Navigate to the Home tab.
         await Shell.Current.GoToAsync("//MainTabs/HomeTab");
     }
 

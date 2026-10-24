@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Linqd.App.Views.EventDetailsPage"
+    Title="Event Details">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20"
+                             Spacing="15">
+
+            <Label
+                x:Name="EventTitleLabel"
+                Text="Event Title"
+                FontSize="26"
+                FontAttributes="Bold"/>
+
+            <Label
+                x:Name="EventDateLabel"
+                Text="Date and Time"/>
+
+            <Label
+                x:Name="EventLocationLabel"
+                Text="Location"/>
+
+            <Label
+                Text="Description"
+                FontSize="20"
+                FontAttributes="Bold"/>
+
+            <Label
+                x:Name="EventDescriptionLabel"
+                Text="Event description will appear here."/>
+
+            <Button
+                x:Name="RsvpButton"
+                Text="RSVP"
+                Clicked="OnRsvpClicked"/>
+
+            <Button
+                Text="Back"
+                Clicked="OnBackClicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

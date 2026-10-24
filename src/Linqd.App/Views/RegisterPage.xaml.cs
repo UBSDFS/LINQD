@@ -11,7 +11,7 @@ public partial class RegisterPage : ContentPage
     }
 
 
-    private void OnRegisterClicked(object sender, EventArgs e)
+    private async void OnRegisterClicked(object sender, EventArgs e)
     {
         MessageLabel.Text = "Register button clicked!";
 
@@ -69,7 +69,9 @@ public partial class RegisterPage : ContentPage
             Username = username
         };
 
-        bool registered = authenticationService.RegisterUser(newUser, password);
+        bool registered = await authenticationService.RegisterUserAsync(
+    newUser,
+    password);
 
         if (!registered)
         {

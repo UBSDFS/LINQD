@@ -9,11 +9,13 @@ public partial class HomePage : ContentPage
     private readonly EventService _eventService;
     private readonly UserSessionService _sessionService;
 
+    // Tracks which event list the user selected.
+    private string _selectedEventFilter = "All";
+
     public HomePage()
     {
         InitializeComponent();
 
-        // Retrieve shared services.
         _eventService = IPlatformApplication.Current!
             .Services.GetRequiredService<EventService>();
 
@@ -21,20 +23,11 @@ public partial class HomePage : ContentPage
             .Services.GetRequiredService<UserSessionService>();
     }
 
-    // Refresh events whenever Home becomes visible.
     protected override async void OnAppearing()
     {
         base.OnAppearing();
 
-        try
-        {
-            await LoadEventsAsync();
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine(
-                $"Event loading failed: {ex}");
-        }
+        await RefreshEventsAsync();
     }
 
     private async Task LoadEventsAsync()
@@ -43,16 +36,41 @@ public partial class HomePage : ContentPage
         PublicEventsContainer.Children.Clear();
         PrivateEventsContainer.Children.Clear();
 
-        // Retrieve saved events.
-        var events = await _eventService.GetEventsAsync();
+        List<Linqd.App.Models.Event> events;
+
+        // Retrieve events based on the selected filter.
+        if (_selectedEventFilter == "Hosting")
+        {
+            if (!_sessionService.IsLoggedIn ||
+                _sessionService.CurrentUser == null)
+            {
+                ShowEmptyMessage(
+                    "Log in to view events you're hosting.");
+                return;
+            }
+
+            events = await _eventService.GetHostedEventsAsync(
+                _sessionService.CurrentUser.UserId);
+        }
+        else if (_selectedEventFilter == "Attending")
+        {
+            ShowEmptyMessage(
+                "Attending events will appear after you RSVP.");
+            return;
+        }
+        else
+        {
+            events = await _eventService.GetEventsAsync();
+        }
 
         // Public events are available to everyone.
         var publicEvents = events
-            .Where(eventItem => eventItem.Visibility == "Public")
+            .Where(eventItem =>
+                eventItem.Visibility == "Public")
             .OrderBy(eventItem => eventItem.StartDateTime)
             .ToList();
 
-        // Private events are visible only to their creator for now.
+        // Private events are visible only to their creator.
         var privateEvents = events
             .Where(eventItem =>
                 eventItem.Visibility == "Private" &&
@@ -62,10 +80,22 @@ public partial class HomePage : ContentPage
             .OrderBy(eventItem => eventItem.StartDateTime)
             .ToList();
 
-        // Show or hide empty-state messages.
-        NoPublicEventsLabel.IsVisible = publicEvents.Count == 0;
+        // Set empty-state messages.
+        NoPublicEventsLabel.Text =
+            _selectedEventFilter == "Hosting"
+                ? "No public events you're hosting."
+                : "No public events available.";
 
-        NoPrivateEventsLabel.IsVisible = privateEvents.Count == 0;
+        NoPrivateEventsLabel.Text =
+            _selectedEventFilter == "Hosting"
+                ? "No private events you're hosting."
+                : "No private plans available.";
+
+        NoPublicEventsLabel.IsVisible =
+            publicEvents.Count == 0;
+
+        NoPrivateEventsLabel.IsVisible =
+            privateEvents.Count == 0;
 
         // Display public events.
         foreach (var eventItem in publicEvents)
@@ -82,8 +112,17 @@ public partial class HomePage : ContentPage
         }
     }
 
+    private void ShowEmptyMessage(string message)
+    {
+        NoPublicEventsLabel.Text = message;
+        NoPublicEventsLabel.IsVisible = true;
+
+        NoPrivateEventsLabel.IsVisible = false;
+    }
+
     // Build a simple visual display for each event.
-    private View CreateEventDisplay(Linqd.App.Models.Event eventItem)
+    private View CreateEventDisplay(
+        Linqd.App.Models.Event eventItem)
     {
         var eventLayout = new VerticalStackLayout
         {
@@ -108,18 +147,70 @@ public partial class HomePage : ContentPage
         {
             Text = eventItem.Location
         });
+        var tapGesture = new TapGestureRecognizer();
 
-        return new Border
+        tapGesture.Tapped += async (sender, args) =>
+        {
+            await Shell.Current.GoToAsync(
+                $"eventdetails?eventId={eventItem.EventId}");
+        };
+        var eventBorder = new Border
         {
             StrokeThickness = 1,
             Padding = new Thickness(5),
             Content = eventLayout
         };
+
+        eventBorder.GestureRecognizers.Add(tapGesture);
+
+        return eventBorder;
+    }
+
+    // Event filter buttons.
+    private async void OnAllEventsClicked(
+        object sender, EventArgs e)
+    {
+        _selectedEventFilter = "All";
+        await RefreshEventsAsync();
+    }
+
+    private async void OnAttendingEventsClicked(
+        object sender, EventArgs e)
+    {
+        _selectedEventFilter = "Attending";
+        await RefreshEventsAsync();
+    }
+
+    private async void OnHostingEventsClicked(
+        object sender, EventArgs e)
+    {
+        _selectedEventFilter = "Hosting";
+        await RefreshEventsAsync();
+    }
+
+    private async Task RefreshEventsAsync()
+    {
+        try
+        {
+            await LoadEventsAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Event loading failed: {ex}");
+
+            await DisplayAlertAsync(
+                "Error",
+                "Unable to load events.",
+                "OK");
+        }
     }
 
     // Preserve existing Profile navigation.
-    private async void OnProfileClicked(object sender, EventArgs e)
+    private async void OnProfileClicked(
+        object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//MainTabs/ProfileTab");
+        await Shell.Current.GoToAsync(
+            "//MainTabs/ProfileTab");
     }
 }

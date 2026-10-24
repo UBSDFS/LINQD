@@ -13,6 +13,29 @@
                 Text="Welcome to LINQD"
                 FontSize="26"
                 FontAttributes="Bold"/>
+            <!-- Event list filters -->
+            <Grid ColumnDefinitions="*,*,*"
+                  ColumnSpacing="8">
+
+                <Button
+                    x:Name="AllEventsButton"
+                    Grid.Column="0"
+                    Text="All"
+                    Clicked="OnAllEventsClicked"/>
+
+                <Button
+                    x:Name="AttendingEventsButton"
+                    Grid.Column="1"
+                    Text="Attending"
+                    Clicked="OnAttendingEventsClicked"/>
+
+                <Button
+                    x:Name="HostingEventsButton"
+                    Grid.Column="2"
+                    Text="Hosting"
+                    Clicked="OnHostingEventsClicked"/>
+
+            </Grid>
 
             <!-- Public event discovery -->
             <Border StrokeThickness="1"

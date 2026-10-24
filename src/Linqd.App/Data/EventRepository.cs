@@ -18,4 +18,13 @@ public class EventRepository
     {
         return await _database.GetEventsAsync();
     }
+    // Retrieve events hosted by a user.
+    public async Task<List<Event>> GetHostedEventsAsync(int userId)
+    {
+        return await _database.GetHostedEventsAsync(userId);
+    }
+    public async Task<Event?> GetEventByIdAsync(int eventId)
+    {
+        return await _database.GetEventByIdAsync(eventId);
+    }
 }

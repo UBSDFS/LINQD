@@ -24,6 +24,9 @@ public static class MauiProgram
 		builder.Services.AddSingleton<EventService>();
 		builder.Services.AddSingleton<LinqdDatabase>();
 		builder.Services.AddSingleton<EventRepository>();
+		builder.Services.AddSingleton<UserRepository>();
+		builder.Services.AddSingleton<RsvpRepository>();
+		builder.Services.AddSingleton<RsvpService>();
 		var app = builder.Build();
 
 
