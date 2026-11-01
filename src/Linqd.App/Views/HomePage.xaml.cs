@@ -52,12 +52,21 @@ public partial class HomePage : ContentPage
             events = await _eventService.GetHostedEventsAsync(
                 _sessionService.CurrentUser.UserId);
         }
+
         else if (_selectedEventFilter == "Attending")
         {
-            ShowEmptyMessage(
-                "Attending events will appear after you RSVP.");
-            return;
+            if (!_sessionService.IsLoggedIn ||
+                _sessionService.CurrentUser == null)
+            {
+                ShowEmptyMessage(
+                    "Log in to view events you're attending.");
+                return;
+            }
+
+            events = await _eventService.GetAttendingEventsAsync(
+                _sessionService.CurrentUser.UserId);
         }
+
         else
         {
             events = await _eventService.GetEventsAsync();
@@ -80,16 +89,23 @@ public partial class HomePage : ContentPage
             .OrderBy(eventItem => eventItem.StartDateTime)
             .ToList();
 
-        // Set empty-state messages.
+
         NoPublicEventsLabel.Text =
-            _selectedEventFilter == "Hosting"
-                ? "No public events you're hosting."
-                : "No public events available.";
+            _selectedEventFilter switch
+            {
+                "Hosting" => "No public events you're hosting.",
+                "Attending" => "No public events you're attending.",
+                _ => "No public events available."
+            };
 
         NoPrivateEventsLabel.Text =
-            _selectedEventFilter == "Hosting"
-                ? "No private events you're hosting."
-                : "No private plans available.";
+            _selectedEventFilter switch
+            {
+                "Hosting" => "No private events you're hosting.",
+                "Attending" => "No private events you're attending.",
+                _ => "No private plans available."
+            };
+
 
         NoPublicEventsLabel.IsVisible =
             publicEvents.Count == 0;

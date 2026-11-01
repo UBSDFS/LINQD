@@ -119,4 +119,34 @@ public class LinqdDatabase
                 rsvp.EventId == eventId)
             .FirstOrDefaultAsync();
     }
+
+    // Retrieve events the user has RSVP'd to as attending.
+    public async Task<List<Event>> GetAttendingEventsAsync(int userId)
+    {
+        await InitializeAsync();
+
+        var rsvps = await GetRsvpsByUserIdAsync(userId);
+
+        var attendingRsvps = rsvps
+            .Where(rsvp => rsvp.Response == "Attending")
+            .GroupBy(rsvp => rsvp.EventId)
+            .Select(group => group.First());
+
+        var attendingEvents = new List<Event>();
+
+        foreach (var rsvp in attendingRsvps)
+        {
+            var eventItem = await GetEventByIdAsync(rsvp.EventId);
+
+            if (eventItem != null)
+            {
+                attendingEvents.Add(eventItem);
+            }
+        }
+
+        return attendingEvents
+            .OrderBy(eventItem => eventItem.StartDateTime)
+            .ToList();
+    }
+
 }

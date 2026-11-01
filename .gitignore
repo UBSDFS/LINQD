@@ -2,7 +2,7 @@
 bin/
 obj/
 linqd-verification.db3
-
+src/Linqd.App/Resources/Raw/ticketmaster.local.json
 # Visual Studio / VS Code
 .vs/
 .vscode/

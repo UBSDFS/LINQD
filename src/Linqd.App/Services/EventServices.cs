@@ -30,4 +30,10 @@ public class EventService
     {
         return await _eventRepository.GetEventByIdAsync(eventId);
     }
+
+    public async Task<List<Event>> GetAttendingEventsAsync(int userId)
+    {
+        return await _eventRepository.GetAttendingEventsAsync(userId);
+    }
+
 }

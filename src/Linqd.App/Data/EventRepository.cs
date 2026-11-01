@@ -27,4 +27,10 @@ public class EventRepository
     {
         return await _database.GetEventByIdAsync(eventId);
     }
+
+    public async Task<List<Event>> GetAttendingEventsAsync(int userId)
+    {
+        return await _database.GetAttendingEventsAsync(userId);
+    }
+
 }

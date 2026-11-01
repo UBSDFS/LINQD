@@ -23,7 +23,7 @@
         <ShellContent
             Title="Discover"
             Route="DiscoverTab"
-            ContentTemplate="{DataTemplate views:HomePage}"/>
+            ContentTemplate="{DataTemplate views:DiscoverPage}"/>
 
         <ShellContent
             Title="Create"
